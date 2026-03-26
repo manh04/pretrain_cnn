@@ -35,7 +35,7 @@ def build_cnn5_feature_extractor() -> nn.Sequential:
 
         # Block 5: [B, 64, 12, 20] -> [B, 64, 12, 20]
         nn.Conv2d(64, 32, kernel_size=3, stride=1, padding=1),
-        nn.BatchNorm2d(64),
+        nn.BatchNorm2d(32),
         nn.ReLU(inplace=True),
     )
 
