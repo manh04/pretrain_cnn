@@ -74,8 +74,6 @@ def run_pretrain(train_loader, val_loader, epochs=10, lr=1e-4, device=None, save
     model = PretrainCNN().to(device)
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    train_loss = []
-    val_loss = []
 
     best_val_loss = float("inf")
 
@@ -96,7 +94,7 @@ def run_pretrain(train_loader, val_loader, epochs=10, lr=1e-4, device=None, save
             train_loss += loss.item()
 
         avg_train_loss = train_loss / max(1, len(train_loader))
-        train_loss.append(avg_train_loss)
+        
         # Validation
         model.eval()
         val_loss = 0.0
@@ -110,15 +108,8 @@ def run_pretrain(train_loader, val_loader, epochs=10, lr=1e-4, device=None, save
                 val_loss += loss.item()
 
         avg_val_loss = val_loss / max(1, len(val_loader))
-        val_loss.append(val_loss)
         print(f"Epoch [{epoch+1}/{epochs}] - Train MSE: {avg_train_loss:.6f} | Val MSE: {avg_val_loss:.6f}")
 
-
-        with open("loss_log.json", "w") as f:
-            json.dump({
-        "train": train_loss,
-        "val": val_loss
-                }, f)
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             torch.save(model.state_dict(), save_path)
